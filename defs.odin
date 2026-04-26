@@ -1,0 +1,39 @@
+package seusdl2
+
+MAX_STARS :: 500
+SCREEN_WIDTH :: 1280
+SCREEN_HEIGHT :: 720
+PLAYER_SPEED :: 6
+PLAYER_BULLET_SPEED :: 16
+MAX_KEYBOARD_KEYS :: 350
+SIDE_PLAYER :: 0
+SIDE_ALIEN :: 1
+ALIEN_BULLET_SPEED :: 8
+FPS :: 60
+NUM_HIGHSCORES :: 8
+MAX_SND_CHANNELS :: 8
+
+MAX_LINE_LENGTH :: 1024
+MAX_SCORE_NAME_LENGTH :: 32
+
+Sound_Channel:: enum i32 {
+    ANY = -1,
+    PLAYER,
+    ALIEN_FIRE,
+    POINTS,
+}
+
+Sound_Effect:: enum i32 {
+    PLAYER_FIRE = 0,
+    ALIEN_FIRE,
+    PLAYER_DIE,
+    ALIEN_DIE,
+    POINTS,
+    MAX,
+}
+
+Text_Position :: enum {
+    LEFT,
+    CENTER,
+    RIGHT,
+}
