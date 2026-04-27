@@ -70,6 +70,8 @@ logic :: proc() {
 
     doBullets()
 
+    doPlayerEnemyCollisions()
+
     doExplosions()
 
     doDebris()
@@ -117,35 +119,34 @@ draw :: proc() {
 @(private="file")
 doPlayer :: proc() {
 
-    if player != nil {
+    if player == nil do return
 
-        player.dx = 0
-        player.dy = 0
+    player.dx = 0
+    player.dy = 0
 
-        if player.reload > 0 {
-            player.reload -= 1
-        }
+    if player.reload > 0 {
+        player.reload -= 1
+    }
 
-        if app.keyboard[SDL.SCANCODE_UP] {
-            player.dy = -PLAYER_SPEED
-        }
+    if app.keyboard[SDL.SCANCODE_UP] {
+        player.dy = -PLAYER_SPEED
+    }
 
-        if app.keyboard[SDL.SCANCODE_DOWN] {
-            player.dy = PLAYER_SPEED
-        }
+    if app.keyboard[SDL.SCANCODE_DOWN] {
+        player.dy = PLAYER_SPEED
+    }
 
-        if app.keyboard[SDL.SCANCODE_LEFT] {
-            player.dx = -PLAYER_SPEED
-        }
+    if app.keyboard[SDL.SCANCODE_LEFT] {
+        player.dx = -PLAYER_SPEED
+    }
 
-        if app.keyboard[SDL.SCANCODE_RIGHT] {
-            player.dx = PLAYER_SPEED
-        }
+    if app.keyboard[SDL.SCANCODE_RIGHT] {
+        player.dx = PLAYER_SPEED
+    }
 
-        if app.keyboard[SDL.SCANCODE_LCTRL] && player.reload <= 0 {
-            playSound(i32(Sound_Effect.PLAYER_FIRE), i32(Sound_Channel.PLAYER))
-            fireBullet()            
-        }
+    if app.keyboard[SDL.SCANCODE_LCTRL] && player.reload <= 0 {
+        playSound(i32(Sound_Effect.PLAYER_FIRE), i32(Sound_Channel.PLAYER))
+        fireBullet()            
     }
 }
 
@@ -411,27 +412,26 @@ fireAlienBullet :: proc(e : ^Entity) {
 @(private="file")
 clipPlayer :: proc() {
 
-    if player != nil {
+    if player == nil do return
 
-        if player.x < 0 {
+    if player.x < 0 {
 
-            player.x = 0
-        }
+        player.x = 0
+    }
 
-        if player.y < 0 {
+    if player.y < 0 {
 
-            player.y = 0
-        }
+        player.y = 0
+    }
 
-        if player.x > SCREEN_WIDTH / 2 {
+    if player.x > SCREEN_WIDTH / 2 {
 
-            player.x = SCREEN_WIDTH / 2
-        }
+        player.x = SCREEN_WIDTH / 2
+    }
 
-        if i32(player.y) > SCREEN_HEIGHT - player.h {
+    if i32(player.y) > SCREEN_HEIGHT - player.h {
 
-            player.y = f32(SCREEN_HEIGHT - player.h)
-        }
+        player.y = f32(SCREEN_HEIGHT - player.h)
     }
 }
 
@@ -732,5 +732,36 @@ drawPointsPods :: proc() {
         if entity.health > FPS * 2 || entity.health % 12 < 6 {
             blit(entity.texture, i32(entity.x), i32(entity.y))
         }        
+    }
+}
+
+@(private="file")
+doPlayerEnemyCollisions :: proc() {
+
+    if player == nil do return
+
+    e: ^Entity
+
+    for e = stage.fighterHead.next; e != nil; e = e.next {
+
+        if e != player && e.side == SIDE_ALIEN {
+
+            if collision(i32(player.x), i32(player.y), player.w, player.h,
+                         i32(e.x), i32(e.y), e.w, e.h) {
+
+                playSound(i32(Sound_Effect.PLAYER_DIE), i32(Sound_Channel.PLAYER))                
+
+                addExplosions(i32(e.x), i32(e.y), 32)
+                addExplosions(i32(player.x), i32(player.y), 32)
+
+                addDebris(e)
+                addDebris(player)
+
+                e.health = 0
+                player.health = 0
+            }
+
+        }
+
     }
 }
