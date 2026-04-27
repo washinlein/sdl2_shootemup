@@ -31,9 +31,24 @@ intitSDL :: proc() {
 }
 
 cleanup :: proc() {
-    SDL.Quit()
-    SDL.DestroyWindow(app.window)
+
+    texture := app.textureHead.next
+
+    for texture != nil {
+        next := texture.next
+
+        if texture.texture != nil {
+            SDL.DestroyTexture(texture.texture)
+        }
+
+        free(texture)
+
+        texture = next
+    }
+
     SDL.DestroyRenderer(app.renderer)
+    SDL.DestroyWindow(app.window)        
+    SDL.Quit()    
 }
 
 initGame :: proc() {
