@@ -26,8 +26,7 @@ To build and run this project, you will need:
 * SDL2 (see note below)
 
 > **Note:** Odin provides SDL2 bindings and prebuilt libraries under its `vendor` directory.
-> If your Odin installation includes SDL2 support, no additional setup may be required.
-> Otherwise, you will need to install SDL2 development libraries manually.
+> To run the game, make sure the SDL2, SDL2_mixer, and SDL2_image libraries (.dll or .so) are available in your PATH, or copy them into the project directory.
 
 ## Getting Started
 
