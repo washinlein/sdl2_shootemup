@@ -23,8 +23,11 @@ doInput :: proc() {
 }
 
 doKeyDown :: proc(event : ^SDL.KeyboardEvent) {
-    if event.keysym.scancode == SDL.SCANCODE_ESCAPE {
-        os.exit(0)
+    if event.keysym.scancode == .ESCAPE {
+        quitEvent := SDL.Event{type = .QUIT}
+
+        SDL.PushEvent(&quitEvent)
+        return
     }
 
     if event.repeat == 0 && i32(event.keysym.scancode) < MAX_KEYBOARD_KEYS {
