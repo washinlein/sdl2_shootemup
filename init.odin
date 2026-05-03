@@ -46,6 +46,10 @@ cleanup :: proc() {
         texture = next
     }
 
+    SDL_MIX.Quit()
+
+    SDL_IMG.Quit()
+
     SDL.DestroyRenderer(app.renderer)
     SDL.DestroyWindow(app.window)        
     SDL.Quit()    

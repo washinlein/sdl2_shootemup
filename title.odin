@@ -41,7 +41,7 @@ logic :: proc() {
     if app.keyboard[SDL.SCANCODE_LCTRL] {
         initStage()
     }
-    
+
 }
 
 draw :: proc() {
@@ -75,5 +75,3 @@ drawLogo :: proc() {
     blitRect(shooterTexture, &r, (SCREEN_WIDTH / 2) - (r.w / 2), 250)
 
 }
-
-
